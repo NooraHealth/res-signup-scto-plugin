@@ -106,8 +106,16 @@ function apiCall() {
 
     request.onreadystatechange = function () {
       if (request.readyState === 4) {
-        var response = JSON.parse(request.responseText);
-        processPayload(response);
+        if (request.status == 200) {
+          var response = JSON.parse(request.responseText);
+          processPayload(response);
+        }
+        else if (request.status == 404) {
+          setResult("danger", "Failure", "Server returned 404")
+        }
+        else if (request.status == 500) {
+          setResult("danger", "Failure", "Server returned 500")
+        }
       }
     }
 
