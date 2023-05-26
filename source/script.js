@@ -82,11 +82,11 @@ function setResult(resultClass, resultText, reason = null) {
 function setCurrentStatus() {
   if (currentAnswer == "Yes") {
     setResult("success", "Success");
-    answerState.innerText = "<b> Previous Response: </b>";
+    answerState.innerHTML = "<b> Previous Response: </b>";
   }
   else if (currentAnswer == "No") {
     setResult("danger", "Failure");
-    answerState.innerText = "<b> Previous Response: </b>";
+    answerState.innerHTML = "<b> Previous Response: </b>";
   }
 }
 
