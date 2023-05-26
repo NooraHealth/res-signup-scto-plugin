@@ -90,18 +90,22 @@ function setCurrentStatus() {
   }
 }
 
+function createPayload(mobile_numbers, condition_area = "scanu", program = "mch", country = "bangladesh", language = "ben", call_id = "123456") {
+  return {
+    "mobile_numbers": mobile_numbers,
+    "condition_area": condition_area,
+    "program": program,
+    "country": country,
+    "language": language,
+    "call_id": call_id
+  }
+}
+
 
 function apiCall() {
   try {
     request = makeHttpObject()
-    var payload = {
-      "mobile_numbers": [ptoNumber],
-      "condition_area": "scanu",
-      "program": "mch",
-      "country": "bangladesh",
-      "language": "ben",
-      "call_id": "123456"
-    }
+    payload = createPayload([ptoNumber])
 
     request.open('POST', apiUrl, true)
     //   request.setRequestHeader('Authorization', 'Basic ' + btoa(unescape(encodeURIComponent(accountSID + ':' + authToken))))
