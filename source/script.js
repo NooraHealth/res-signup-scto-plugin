@@ -110,8 +110,13 @@ function apiCall() {
     request.onreadystatechange = function () {
       if (request.readyState === 4) {
         if (request.status == 200) {
-          var response = JSON.parse(request.responseText);
-          processPayload(response);
+          try {
+            var response = JSON.parse(request.responseText);
+            processPayload(response);
+          }
+          catch {
+            setResult("danger", "Failure", "Error occured while parsing response")
+          }
         }
         else if (request.status == 404) {
           setResult("danger", "Failure", "Server returned 404")
@@ -124,6 +129,6 @@ function apiCall() {
 
     request.send(JSON.stringify(payload));
   } catch (error) {
-    debug.value = error;
+    setResult("danger", "Failure", error);
   }
 }
