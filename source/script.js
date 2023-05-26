@@ -126,6 +126,9 @@ function apiCall() {
         }
       }
     }
+    request.onerror = function () {
+      setResult("danger", "Failure", "Network Error, please check your internet connection!")
+    }
 
     request.send(JSON.stringify(payload));
   } catch (error) {
