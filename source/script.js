@@ -6,6 +6,7 @@ var toNumber = document.getElementById('toNumber');
 var signUpBtn = document.getElementById('signup');
 var result = document.getElementById('result');
 var info = document.getElementById('info');
+var answerState = document.getElementById("answerState");
 
 // References to values stored in the plug-in parameters
 var ptoNumber = getPluginParameter('toNumber');
@@ -81,9 +82,11 @@ function setResult(resultClass, resultText, reason = null) {
 function setCurrentStatus() {
   if (currentAnswer == "Yes") {
     setResult("success", "Success");
+    answerState.innerText = "<b> Previous Response: </b>";
   }
   else if (currentAnswer == "No") {
     setResult("danger", "Failure");
+    answerState.innerText = "<b> Previous Response: </b>";
   }
 }
 
