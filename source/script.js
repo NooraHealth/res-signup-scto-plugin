@@ -4,16 +4,20 @@ var toNumber = document.getElementById('toNumber');
 
 
 var signUpBtn = document.getElementById('signup');
-var result = document.getElementById('result');
-var info = document.getElementById('info');
+var result = document.getElementById('statusBox');
+var reasonDiv = document.getElementById('reasonBox');
 var answerState = document.getElementById("answerState");
+var headingElement = document.getElementById("title");
 
 // References to values stored in the plug-in parameters
+var title = getPluginParameter('title');
 var ptoNumber = getPluginParameter('toNumber');
 var pDateOfDischarge = getPluginParameter('dateOfDischarge');
 var apiUrl = getPluginParameter('apiUrl');
 var currentAnswer = fieldProperties.CURRENT_ANSWER;
 
+
+headingElement.innerText = title || "RES Onboarding";
 toNumber.innerText = ptoNumber;
 dateOfDischarge.innerText = formatDate(pDateOfDischarge);
 setCurrentStatus();
@@ -34,6 +38,33 @@ function formatDate(date) {
 }
 
 
+function formatDateTime(date) {
+  var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear(),
+    hours = '' + d.getHours(),
+    minutes = '' + d.getMinutes();
+
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+
+  if (month.length < 2)
+    month = '0' + month;
+  if (day.length < 2)
+    day = '0' + day;
+  if (hours.length < 2)
+    hours = '0' + hours;
+  if (minutes.length < 2)
+    minutes = '0' + minutes;
+
+  return [day, month, year].join('-') + ' ' + strTime;
+}
+
+
 // Define the dial function
 signUpBtn.onclick = function () {
   apiCall();
@@ -46,7 +77,7 @@ function processPayload(data) {
     var status = item['success'] ? 'Success' : 'Failure'
     var statusClass = item['success'] ? 'success' : 'danger';
     if (status == "Success") {
-      setResult(statusClass, status)
+      setResult(statusClass, status, "Sign up complete!")
       setAnswer("Yes");
     }
     else if (status == "Failure") {
@@ -71,22 +102,39 @@ function makeHttpObject() {
 }
 
 function setResult(resultClass, resultText, reason = null) {
-  result.classList.add(resultClass);
+  t1 = result.classList.replace("danger", resultClass);
+  t2 = result.classList.replace("success", resultClass);
+
+  if ((t1 || t2) == false) {
+    result.classList.add(resultClass);
+  }
   result.innerText = resultText;
   if (reason != null) {
-    info.classList.add('subtitle');
-    info.innerHTML = "<p> Reason : " + reason + "</p>";
+    reasonDiv.classList.add('reason');
+    reasonDiv.innerText = reason;
+    var metadata = {
+      "reason": reason, "timestamp": new Date()
+    }
+    setMetaData(JSON.stringify(metadata));
   }
 }
 
 function setCurrentStatus() {
+  var metadata = JSON.parse(getMetaData());
+  if (metadata != null) {
+    var last_response_time = formatDateTime(metadata['timestamp']);
+  }
   if (currentAnswer == "Yes") {
-    setResult("success", "Success");
-    answerState.innerHTML = "<b> Previous Response: </b>";
+    setResult("success", "Success", metadata['reason']);
+    if (last_response_time != undefined) {
+      answerState.innerHTML = "* Last recorded server response at " + last_response_time;
+    }
   }
   else if (currentAnswer == "No") {
-    setResult("danger", "Failure");
-    answerState.innerHTML = "<b> Previous Response: </b>";
+    setResult("danger", "Failure", metadata['reason']);
+    if (last_response_time != undefined) {
+      answerState.innerHTML = "* Last recorded server response at " + last_response_time;
+    }
   }
 }
 
@@ -120,18 +168,22 @@ function apiCall() {
           }
           catch {
             setResult("danger", "Failure", "Error occured while parsing response")
+            setAnswer("No")
           }
         }
         else if (request.status == 404) {
           setResult("danger", "Failure", "Server returned 404")
+          setAnswer("No")
         }
         else if (request.status == 500) {
           setResult("danger", "Failure", "Server returned 500")
+          setAnswer("No")
         }
       }
     }
     request.onerror = function () {
       setResult("danger", "Failure", "Network Error, please check your internet connection!")
+      setAnswer("No")
     }
 
     request.send(JSON.stringify(payload));

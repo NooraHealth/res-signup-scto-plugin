@@ -1,22 +1,27 @@
 <div class="container">
+    <h2 id="title"></h2>
 
-    <p><strong><span id="txt1">Please check before call:</span></strong></p>
-    <p id="txt2">Date of Discharge: <span id="dateOfDischarge"></span></p>
-    <p>Respondent Number: <span id="toNumber"></span></p>
-
-    <p>
-        <button id="signup" class="btn btn-block">Sign Up</button>
-        <small id="txt3">This will sign up respondent to the BD RES service.</small>
-    </p>
-
-    <p id="answerState">
-
-    </p>
-    <div id="result" class="base">
-        Result will appear here
-    </div>
-    <div id="info">
+    <div class="additional-details">
+        {{LABEL}}
     </div>
 
+    <div class="details">
+        <label>Phone Number:</label>
+        <span id="toNumber"></span>
+    </div>
 
+    <div class="details">
+        <label>Date of Discharge:</label>
+        <span id="dateOfDischarge"></span>
+    </div>
+
+    <button id="signup" type="submit">Sign Up</button>
+
+    <div class="status" id="statusBox">
+
+    </div>
+    <div id="reasonBox">
+
+    </div>
+    <small id="answerState"><em></em></small>
 </div>
