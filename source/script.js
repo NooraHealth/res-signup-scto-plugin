@@ -155,22 +155,21 @@ function createPayload(mobile_numbers, expected_date_of_delivery, reference_mobi
     "reference_mobile_number": reference_mobile_number,
     "call_id": call_id
   }
-
 }
 
 
 function apiCall() {
   try {
     request = makeHttpObject()
-    payload = createPayload({
-      mobile_numbers: [pPhoneNumber],
-      expected_date_of_delivery: pDueDate,
-      reference_mobile_number: referenceMobileNumber,
-      program: program,
-      state: state,
-      condition_area: conditionArea,
-      call_id: callId
-    })
+    payload = createPayload(
+      mobile_numbers = [pPhoneNumber],
+      expected_date_of_delivery = pDueDate,
+      reference_mobile_number = referenceMobileNumber,
+      program = program,
+      state = state,
+      condition_area = conditionArea,
+      call_id = callId
+    )
 
     request.open('POST', apiUrl, true)
     request.setRequestHeader('Content-type', ' application/json')
