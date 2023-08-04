@@ -1,6 +1,6 @@
 // References to field elements
-var dateOfDischarge = document.getElementById('dateOfDischarge');
-var toNumber = document.getElementById('toNumber');
+var dueDate = document.getElementById('dueDate');
+var phoneNumber = document.getElementById('phoneNumber');
 
 
 var signUpBtn = document.getElementById('signup');
@@ -11,15 +11,20 @@ var headingElement = document.getElementById("title");
 
 // References to values stored in the plug-in parameters
 var title = getPluginParameter('title');
-var ptoNumber = getPluginParameter('toNumber');
-var pDateOfDischarge = getPluginParameter('dateOfDischarge');
+var pPhoneNumber = getPluginParameter('phoneNumber');
+var pDueDate = getPluginParameter('dueDate');
+var referenceMobileNumber = getPluginParameter('referenceMobileNumber');
+var state = getPluginParameter('state');
+var program = getPluginParameter('program');
+var conditionArea = getPluginParameter('conditionArea');
+var callId = getPluginParameter('callId');
 var apiUrl = getPluginParameter('apiUrl');
 var currentAnswer = fieldProperties.CURRENT_ANSWER;
 
 
 headingElement.innerText = title || "RES Onboarding";
-toNumber.innerText = ptoNumber;
-dateOfDischarge.innerText = formatDate(pDateOfDischarge);
+phoneNumber.innerText = pPhoneNumber;
+dueDate.innerText = formatDate(pDueDate);
 setCurrentStatus();
 
 
@@ -65,7 +70,7 @@ function formatDateTime(date) {
 }
 
 
-// Define the dial function
+// Define the button press event
 signUpBtn.onclick = function () {
   apiCall();
 }
@@ -138,25 +143,36 @@ function setCurrentStatus() {
   }
 }
 
-function createPayload(mobile_numbers, condition_area = "scanu", program = "mch", country = "bangladesh", language = "ben", call_id = "123456") {
+function createPayload(mobile_numbers, expected_date_of_delivery, reference_mobile_number, state = "Punjab", condition_area = "anc", program = "rch", country = "India", language = "ben", call_id = "123456") {
   return {
+    "expected_date_of_delivery": formatDate(expected_date_of_delivery),
     "mobile_numbers": mobile_numbers,
+    "state": state,
     "condition_area": condition_area,
     "program": program,
     "country": country,
     "language": language,
+    "reference_mobile_number": reference_mobile_number,
     "call_id": call_id
   }
+
 }
 
 
 function apiCall() {
   try {
     request = makeHttpObject()
-    payload = createPayload([ptoNumber])
+    payload = createPayload({
+      mobile_numbers: [pPhoneNumber],
+      expected_date_of_delivery: pDueDate,
+      reference_mobile_number: referenceMobileNumber,
+      program: program,
+      state: state,
+      condition_area: conditionArea,
+      call_id: callId
+    })
 
     request.open('POST', apiUrl, true)
-    //   request.setRequestHeader('Authorization', 'Basic ' + btoa(unescape(encodeURIComponent(accountSID + ':' + authToken))))
     request.setRequestHeader('Content-type', ' application/json')
 
     request.onreadystatechange = function () {
