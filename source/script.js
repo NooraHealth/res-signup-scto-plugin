@@ -10,11 +10,10 @@ var answerState = document.getElementById("answerState");
 var headingElement = document.getElementById("title");
 
 // References to values stored in the plug-in parameters
-var title = getPluginParameter('title');
 var pPhoneNumber = getPluginParameter('phoneNumber');
-var pDueDate = getPluginParameter('dueDate');
-var referenceMobileNumber = getPluginParameter('referenceMobileNumber');
-var state = getPluginParameter('state');
+var pDueDate = getPluginParameter('dueDate') || null;
+var referenceMobileNumber = getPluginParameter('referenceMobileNumber') || null;
+var state = getPluginParameter('state') || null;
 var pLanguage = getPluginParameter('language');
 var program = getPluginParameter('program');
 var conditionArea = getPluginParameter('conditionArea');
@@ -25,7 +24,12 @@ var currentAnswer = fieldProperties.CURRENT_ANSWER;
 
 headingElement.innerText = title || "RES Onboarding";
 phoneNumber.innerText = pPhoneNumber;
-dueDate.innerText = formatDate(pDueDate);
+if (dueDate == null) {
+  dueDate.parentNode.visibility = 'hidden';
+}
+else {
+  dueDate.innerText = formatDate(pDueDate);
+}
 setCurrentStatus();
 
 
@@ -145,22 +149,27 @@ function setCurrentStatus() {
 }
 
 function createPayload(data) {
+  var conditionArea = data["condition_area"] || "anc";
   output = {
     "mobile_numbers": data["mobile_numbers"],
     "state": data["state"] || "Punjab",
     "program": data["program"] || "rch",
     "country": data["country"] || "India",
     "language": data["language"] || "ben",
-    "reference_mobile_number": data["reference_mobile_number"],
-    "call_id": data["call_id"] || "12345"
+    "call_id": data["call_id"] || "12345",
+    "condition_area": conditionArea
   }
-  conditionArea = data["condition_area"] || "anc";
-  if (conditionArea == "anc") {
+  if (data["reference_mobile_number"] != null) {
+    output["reference_mobile_number"] = data["reference_mobile_number"]
+  }
+
+  if (conditionArea == "anc" && data["expected_date_of_delivery"] != null) {
     output["expected_date_of_delivery"] = formatDate(data["expected_date_of_delivery"])
   }
-  else if (conditionArea == "pnc") {
+  else if (conditionArea == "pnc" && data["expected_date_of_delivery"] != null) {
     output["baby_date_of_birth"] = formatDate(data["expected_date_of_delivery"])
   }
+  return output
 }
 
 
