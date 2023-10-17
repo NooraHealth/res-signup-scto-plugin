@@ -7,7 +7,6 @@ var signUpBtn = document.getElementById('signup');
 var result = document.getElementById('statusBox');
 var reasonDiv = document.getElementById('reasonBox');
 var answerState = document.getElementById("answerState");
-var headingElement = document.getElementById("title");
 
 // References to values stored in the plug-in parameters
 var pPhoneNumber = getPluginParameter('phoneNumber');
@@ -22,10 +21,9 @@ var apiUrl = getPluginParameter('apiUrl');
 var currentAnswer = fieldProperties.CURRENT_ANSWER;
 
 
-headingElement.innerText = title || "RES Onboarding";
 phoneNumber.innerText = pPhoneNumber;
-if (dueDate == null) {
-  dueDate.parentNode.visibility = 'hidden';
+if (pDueDate === null) {
+  dueDate.parentElement.style.visibility = 'hidden';
 }
 else {
   dueDate.innerText = formatDate(pDueDate);
