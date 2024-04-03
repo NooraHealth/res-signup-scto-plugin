@@ -1,6 +1,7 @@
 // References to field elements
 var dueDate = document.getElementById('dueDate');
 var phoneNumber = document.getElementById('phoneNumber');
+var conditionArea = document.getElementById('conditionArea');
 
 
 var signUpBtn = document.getElementById('signup');
@@ -15,7 +16,7 @@ var referenceMobileNumber = getPluginParameter('referenceMobileNumber') || null;
 var state = getPluginParameter('state') || null;
 var pLanguage = getPluginParameter('language');
 var program = getPluginParameter('program');
-var conditionArea = getPluginParameter('conditionArea');
+var pConditionArea = getPluginParameter('conditionArea');
 var callId = getPluginParameter('callId');
 var apiUrl = getPluginParameter('apiUrl');
 var currentAnswer = fieldProperties.CURRENT_ANSWER;
@@ -23,10 +24,17 @@ var currentAnswer = fieldProperties.CURRENT_ANSWER;
 
 phoneNumber.innerText = pPhoneNumber;
 if (pDueDate === null) {
-  dueDate.parentElement.style.visibility = 'hidden';
+  dueDate.parentElement.style.display = 'none';
 }
 else {
   dueDate.innerText = formatDate(pDueDate);
+}
+
+if (pConditionArea === null) {
+  conditionArea.parentElement.style.display = 'none';
+}
+else {
+  conditionArea.innerText = pConditionArea;
 }
 setCurrentStatus();
 
@@ -161,10 +169,10 @@ function createPayload(data) {
     output["reference_mobile_number"] = data["reference_mobile_number"]
   }
 
-  if (conditionArea == "anc" && data["expected_date_of_delivery"] != null) {
+  if (conditionArea.includes("anc") == true && data["expected_date_of_delivery"] != null) {
     output["expected_date_of_delivery"] = formatDate(data["expected_date_of_delivery"])
   }
-  else if (conditionArea == "pnc" && data["expected_date_of_delivery"] != null) {
+  else if (conditionArea.includes("pnc") == true && data["expected_date_of_delivery"] != null) {
     output["baby_date_of_birth"] = formatDate(data["expected_date_of_delivery"])
   }
   return output
@@ -181,7 +189,7 @@ function apiCall() {
       program: program,
       state: state,
       language: pLanguage,
-      condition_area: conditionArea,
+      condition_area: pConditionArea.toLowerCase(),
       call_id: callId
     })
 
