@@ -19,6 +19,7 @@ var program = getPluginParameter('program');
 var pConditionArea = getPluginParameter('conditionArea');
 var callId = getPluginParameter('callId');
 var apiUrl = getPluginParameter('apiUrl');
+var countryName = getPluginParameter('country')
 var currentAnswer = fieldProperties.CURRENT_ANSWER;
 
 
@@ -40,17 +41,22 @@ setCurrentStatus();
 
 
 function formatDate(date) {
-  var d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
+  if(date){
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
 
-  if (month.length < 2)
-    month = '0' + month;
-  if (day.length < 2)
-    day = '0' + day;
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
 
-  return [day, month, year].join('-');
+    return [day, month, year].join('-');
+  }
+  else{
+    return null;
+  }
 }
 
 
@@ -158,7 +164,7 @@ function createPayload(data) {
   var conditionArea = data["condition_area"] || "anc";
   output = {
     "mobile_numbers": data["mobile_numbers"],
-    "state": data["state"] || "Punjab",
+    "state": data["state"] || null,
     "program": data["program"] || "rch",
     "country": data["country"] || "India",
     "language": data["language"] || "ben",
@@ -190,7 +196,8 @@ function apiCall() {
       state: state,
       language: pLanguage,
       condition_area: pConditionArea.toLowerCase(),
-      call_id: callId
+      call_id: callId,
+      country: countryName
     })
 
     request.open('POST', apiUrl, true)
