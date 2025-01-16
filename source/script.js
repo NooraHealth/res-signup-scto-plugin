@@ -19,7 +19,7 @@ var program = getPluginParameter('program');
 var pConditionArea = getPluginParameter('conditionArea');
 var callId = getPluginParameter('callId');
 var apiUrl = getPluginParameter('apiUrl');
-var countryName = getPluginParameter('country')
+var countryName = getPluginParameter('country') || null;
 var currentAnswer = fieldProperties.CURRENT_ANSWER;
 
 
@@ -166,8 +166,8 @@ function createPayload(data) {
     "mobile_numbers": data["mobile_numbers"],
     "state": data["state"] || null,
     "program": data["program"] || "rch",
-    "country": data["country"] || "India",
-    "language": data["language"] || "ben",
+    "country": data["country"],
+    "language": data["language"],
     "call_id": data["call_id"] || "12345",
     "condition_area": conditionArea
   }
