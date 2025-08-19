@@ -1,5 +1,3 @@
-## India RES Signup
-
 ![](extras/plugin-preview.png)
 
 ## Required parameters
