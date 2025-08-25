@@ -14,3 +14,8 @@
 | `conditionArea`         |      Mandatory          | This specifies the condition area of the user, which will be stored in the backend as part of the user's preferences.       |
 | `callId`                |      Mandatory          | This is a unique call ID generated for the user, which is required by the API.                                              |
 | `apiUrl`                |      Mandatory          | This is the URL of the API endpoint that will be invoked to onboard the user to RES.                                        |
+
+## More resources
+
+* **Test form**:
+  [Sample RES Onboarding Form](./extras/test-form/wa-onboarding-plugin-demo.xlsx)
