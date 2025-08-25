@@ -1,6 +1,9 @@
+![](extras/plugin-preview.png)
+
+# Description
 The **RES Signup Plugin** is a field plugin designed to directly onboard users to NooraHealth's Remote Engagement Service (RES) directly from SurveyCTO forms. This plugin enables the teletraining team across different countries to efficiently inform and onboard users to RES, thereby increasing the number of onboarded users for the service.
 
-![](extras/plugin-preview.png)
+[![Download now](extras/download-button.png)](https://github.com/NooraHealth/res-signup-scto-plugin/raw/main/res-signup.fieldplugin.zip)
 
 ## Required parameters
 
